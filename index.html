@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veldora – Beautiful Pond Designs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --aqua:     #6bbfbf;
+      --aqua-lt:  #a8dada;
+      --aqua-pale:#e8f6f6;
+      --sage:     #8db89e;
+      --sage-lt:  #c5ddc9;
+      --cream:    #f9f7f4;
+      --white:    #ffffff;
+      --ink:      #1a2422;
+      --ink-mid:  #3d5250;
+      --ink-soft: #7a9390;
+      --shadow:   0 8px 32px rgba(26,36,34,.09);
+      --shadow-sm:0 2px 12px rgba(26,36,34,.07);
+      --r:        18px;
+      --r-sm:     12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--aqua-lt); border-radius: 4px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(107,191,191,0.12);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: var(--shadow-sm); }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem; font-weight: 600; letter-spacing: .04em;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-logo span { color: var(--aqua); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--ink-mid);
+      text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--aqua); }
+    .nav-toggle {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .nav-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: var(--ink); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 99;
+      background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 36px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 400; color: var(--ink);
+      text-decoration: none; letter-spacing: .04em;
+      transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--aqua); }
+    .mobile-close {
+      position: absolute; top: 24px; right: 24px;
+      background: none; border: none; font-size: 1.8rem;
+      cursor: pointer; color: var(--ink-mid);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative; height: 100svh; min-height: 580px;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('P1.jpg') center/cover no-repeat;
+      animation: heroZoom 12s ease-out forwards;
+      transform-origin: center;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1.12); }
+      to   { transform: scale(1); }
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(16,30,28,.72) 0%,
+        rgba(16,30,28,.28) 55%,
+        rgba(16,30,28,.08) 100%
+      );
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 24px 60px;
+      max-width: 600px;
+    }
+    .hero-label {
+      display: inline-block;
+      font-size: .72rem; font-weight: 500; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--aqua-lt);
+      margin-bottom: 14px;
+      opacity: 0; animation: fadeUp .7s .4s ease forwards;
+    }
+    .hero-content h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 8vw, 3.6rem);
+      font-weight: 300; line-height: 1.15;
+      color: #fff; letter-spacing: .01em;
+      opacity: 0; animation: fadeUp .8s .6s ease forwards;
+    }
+    .hero-content h1 em { font-style: italic; color: var(--aqua-lt); }
+    .hero-desc {
+      margin-top: 16px; font-size: .95rem; line-height: 1.7;
+      color: rgba(255,255,255,.78);
+      opacity: 0; animation: fadeUp .8s .85s ease forwards;
+    }
+    .hero-btns {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin-top: 28px;
+      opacity: 0; animation: fadeUp .8s 1.05s ease forwards;
+    }
+    .btn-primary {
+      padding: 14px 28px; border-radius: 50px;
+      background: var(--aqua); color: #fff;
+      font-size: .88rem; font-weight: 500; letter-spacing: .04em;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background .25s, transform .2s, box-shadow .25s;
+      box-shadow: 0 4px 18px rgba(107,191,191,.4);
+    }
+    .btn-primary:hover { background: #5aafaf; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(107,191,191,.45); }
+    .btn-outline {
+      padding: 13px 28px; border-radius: 50px;
+      border: 1.5px solid rgba(255,255,255,.55); color: #fff;
+      font-size: .88rem; font-weight: 500; letter-spacing: .04em;
+      text-decoration: none; background: rgba(255,255,255,.08);
+      backdrop-filter: blur(8px); cursor: pointer;
+      transition: background .25s, border-color .25s, transform .2s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.8); transform: translateY(-2px); }
+    .hero-scroll {
+      position: absolute; bottom: 28px; right: 28px; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      opacity: 0; animation: fadeIn 1s 1.5s ease forwards;
+    }
+    .hero-scroll span {
+      font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(255,255,255,.55); writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.6), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: .4; transform: scaleY(1); }
+      50%      { opacity: 1;  transform: scaleY(1.2); }
+    }
+
+    /* ─── SECTION COMMONS ─── */
+    section { padding: 80px 24px; }
+    .section-label {
+      font-size: .7rem; font-weight: 500; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--aqua);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.9rem, 6vw, 2.8rem);
+      font-weight: 400; line-height: 1.2; color: var(--ink);
+      letter-spacing: .01em;
+    }
+    .section-title em { font-style: italic; color: var(--aqua); }
+    .section-body {
+      font-size: .95rem; line-height: 1.75; color: var(--ink-soft);
+      max-width: 540px;
+    }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--cream); overflow: hidden; }
+    .about-inner {
+      max-width: 900px; margin: 0 auto;
+      display: grid; gap: 40px;
+    }
+    .about-img-wrap {
+      border-radius: var(--r); overflow: hidden;
+      box-shadow: var(--shadow);
+      aspect-ratio: 4/3;
+      translate: -60px 0; opacity: 0;
+      transition: translate .9s cubic-bezier(.16,1,.3,1), opacity .9s ease;
+    }
+    .about-img-wrap.visible { translate: 0 0; opacity: 1; }
+    .about-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .6s ease;
+    }
+    .about-img-wrap:hover img { transform: scale(1.04); }
+    .about-text { opacity: 0; translate: 0 30px; transition: opacity .8s .2s ease, translate .8s .2s ease; }
+    .about-text.visible { opacity: 1; translate: 0 0; }
+    .about-text .section-title { margin-bottom: 18px; }
+    .about-text .section-body { margin-bottom: 20px; }
+    .about-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; margin-top: 28px;
+    }
+    .stat-card {
+      background: var(--white); border-radius: var(--r-sm);
+      padding: 18px 12px; text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem; font-weight: 600; color: var(--aqua);
+    }
+    .stat-lbl { font-size: .75rem; color: var(--ink-soft); margin-top: 4px; }
+
+    /* ─── SERVICES ─── */
+    #services { background: var(--white); }
+    .services-grid {
+      display: grid; gap: 18px; margin-top: 40px;
+      max-width: 900px; margin-left: auto; margin-right: auto;
+    }
+    .service-card {
+      background: var(--white); border-radius: var(--r);
+      padding: 32px 28px; box-shadow: var(--shadow);
+      border: 1px solid rgba(107,191,191,.12);
+      opacity: 0; translate: 0 40px;
+      transition: opacity .7s ease, translate .7s ease,
+                  box-shadow .3s, transform .3s;
+    }
+    .service-card.visible { opacity: 1; translate: 0 0; }
+    .service-card:nth-child(2) { transition-delay: .12s; }
+    .service-card:nth-child(3) { transition-delay: .24s; }
+    .service-card:hover {
+      box-shadow: 0 16px 48px rgba(107,191,191,.22);
+      transform: translateY(-4px);
+    }
+    .service-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--aqua-pale);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; font-size: 1.5rem;
+    }
+    .service-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-weight: 600; margin-bottom: 10px;
+    }
+    .service-card p { font-size: .9rem; line-height: 1.7; color: var(--ink-soft); }
+    .service-tag {
+      display: inline-block; margin-top: 16px;
+      font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--aqua); font-weight: 500;
+    }
+
+    /* ─── PORTFOLIO ─── */
+    #portfolio { background: var(--cream); }
+    .portfolio-header { margin-bottom: 32px; }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      gap: 14px;
+      max-width: 900px; margin: 0 auto;
+    }
+    .p-card {
+      border-radius: var(--r); overflow: hidden;
+      position: relative; cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      opacity: 0; scale: .96;
+      transition: opacity .6s ease, scale .6s ease, box-shadow .3s;
+      aspect-ratio: 4/3;
+    }
+    .p-card.visible { opacity: 1; scale: 1; }
+    .p-card:nth-child(2) { transition-delay: .1s; }
+    .p-card:nth-child(3) { transition-delay: .15s; }
+    .p-card:nth-child(4) { transition-delay: .2s; }
+    .p-card:nth-child(5) {
+      grid-column: 1 / -1;
+      aspect-ratio: 16/7;
+      transition-delay: .25s;
+    }
+    .p-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .55s cubic-bezier(.16,1,.3,1);
+    }
+    .p-card:hover { box-shadow: var(--shadow); }
+    .p-card:hover img { transform: scale(1.07); }
+    .p-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(16,30,28,.65) 0%, transparent 55%);
+      opacity: 0; transition: opacity .35s;
+      display: flex; align-items: flex-end; padding: 18px;
+    }
+    .p-card:hover .p-overlay { opacity: 1; }
+    .p-overlay-text {
+      color: #fff; font-size: .82rem; font-weight: 500; letter-spacing: .04em;
+    }
+    .p-expand-btn {
+      position: absolute; top: 12px; right: 12px;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255,255,255,.22); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1rem; opacity: 0;
+      transition: opacity .35s, background .25s;
+    }
+    .p-card:hover .p-expand-btn { opacity: 1; }
+    .p-expand-btn:hover { background: rgba(255,255,255,.4); }
+
+    /* ─── LIGHTBOX ─── */
+    #lightbox {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,18,17,.94);
+      display: none; align-items: center; justify-content: center;
+      animation: lbIn .25s ease;
+    }
+    #lightbox.open { display: flex; }
+    @keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+    .lb-img-wrap {
+      width: 92vw; max-width: 700px;
+      aspect-ratio: 4/3; border-radius: var(--r);
+      overflow: hidden;
+      animation: lbImgIn .35s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes lbImgIn {
+      from { scale: .9; opacity: 0; }
+      to   { scale: 1;  opacity: 1; }
+    }
+    #lb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .lb-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,.12); border: none; color: #fff;
+      font-size: 1.2rem; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lb-close:hover { background: rgba(255,255,255,.25); }
+    .lb-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,.12); border: none; color: #fff;
+      width: 44px; height: 44px; border-radius: 50%;
+      font-size: 1.1rem; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lb-nav:hover { background: rgba(255,255,255,.28); }
+    .lb-prev { left: 12px; }
+    .lb-next { right: 12px; }
+    .lb-dots {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px;
+    }
+    .lb-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,.35); cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .lb-dot.active { background: var(--aqua-lt); transform: scale(1.3); }
+
+    /* ─── PROCESS ─── */
+    #process { background: var(--white); }
+    .process-list {
+      margin-top: 40px; display: flex; flex-direction: column; gap: 0;
+      max-width: 640px; margin-left: auto; margin-right: auto;
+      position: relative;
+    }
+    .process-line {
+      position: absolute; left: 19px; top: 20px; bottom: 20px; width: 1px;
+      background: linear-gradient(to bottom, var(--aqua-lt), transparent);
+    }
+    .process-step {
+      display: grid; grid-template-columns: 40px 1fr;
+      gap: 18px; padding-bottom: 36px;
+      opacity: 0;
+      transition: opacity .7s ease, translate .7s ease;
+    }
+    .process-step:nth-child(odd) { translate: -30px 0; }
+    .process-step:nth-child(even) { translate: 30px 0; }
+    .process-step.visible { opacity: 1; translate: 0 0; }
+    .process-step:nth-child(2) { transition-delay: .12s; }
+    .process-step:nth-child(3) { transition-delay: .24s; }
+    .process-step:nth-child(4) { transition-delay: .36s; }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--aqua-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 600; color: var(--aqua);
+      flex-shrink: 0; position: relative; z-index: 1;
+      border: 2px solid var(--aqua-lt);
+    }
+    .step-content h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 600; margin-bottom: 6px; padding-top: 7px;
+    }
+    .step-content p { font-size: .88rem; line-height: 1.7; color: var(--ink-soft); }
+
+    /* ─── INSTAGRAM ─── */
+    #instagram { background: var(--aqua-pale); text-align: center; }
+    .ig-header { margin-bottom: 32px; }
+    .ig-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      max-width: 500px; margin: 0 auto 32px;
+    }
+    .ig-thumb {
+      aspect-ratio: 1; border-radius: var(--r-sm); overflow: hidden;
+      opacity: 0; scale: .88;
+      transition: opacity .5s ease, scale .5s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .ig-thumb.visible { opacity: 1; scale: 1; }
+    .ig-thumb:nth-child(2) { transition-delay: .08s; }
+    .ig-thumb:nth-child(3) { transition-delay: .16s; }
+    .ig-thumb:nth-child(4) { transition-delay: .24s; }
+    .ig-thumb:nth-child(5) { transition-delay: .32s; }
+    .ig-thumb:nth-child(6) { transition-delay: .40s; }
+    .ig-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s ease;
+    }
+    .ig-thumb:hover img { transform: scale(1.08); }
+    .ig-handle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; color: var(--ink-mid); margin-bottom: 20px;
+    }
+    .ig-handle span { color: var(--aqua); }
+
+    /* ─── CONTACT ─── */
+    #contact { background: var(--white); }
+    .contact-inner {
+      max-width: 700px; margin: 0 auto;
+      display: grid; gap: 40px;
+    }
+    .contact-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 600; margin-bottom: 16px;
+    }
+    .contact-options { display: flex; flex-direction: column; gap: 12px; }
+    .contact-option {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-radius: var(--r-sm);
+      background: var(--cream); text-decoration: none; color: var(--ink);
+      font-size: .9rem; font-weight: 500;
+      transition: background .25s, transform .2s, box-shadow .25s;
+      box-shadow: var(--shadow-sm);
+    }
+    .contact-option:hover { background: var(--aqua-pale); transform: translateX(4px); box-shadow: var(--shadow); }
+    .contact-option-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .ico-ig { background: linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7); color: #fff; }
+    .ico-wa { background: #25d366; color: #fff; }
+    .ico-gmail { background: #ea4335; color: #fff; }
+    .contact-form { background: var(--cream); border-radius: var(--r); padding: 28px 24px; box-shadow: var(--shadow-sm); }
+    .contact-form h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 600; margin-bottom: 20px;
+    }
+    .form-group { margin-bottom: 16px; position: relative; }
+    .form-group label {
+      display: block; font-size: .78rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ink-soft); margin-bottom: 6px;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 14px 16px;
+      border-radius: var(--r-sm); border: 1.5px solid transparent;
+      background: var(--white); font-family: 'DM Sans', sans-serif;
+      font-size: .92rem; color: var(--ink); outline: none;
+      transition: border-color .25s, box-shadow .25s;
+      box-shadow: var(--shadow-sm);
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--aqua);
+      box-shadow: 0 0 0 3px rgba(107,191,191,.18);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-submit {
+      width: 100%; padding: 15px; border-radius: 50px;
+      border: none; background: var(--aqua); color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem; font-weight: 500; letter-spacing: .04em;
+      cursor: pointer; transition: background .25s, transform .2s, box-shadow .25s;
+      box-shadow: 0 4px 18px rgba(107,191,191,.35);
+    }
+    .form-submit:hover { background: #5aafaf; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(107,191,191,.4); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink); color: rgba(255,255,255,.6);
+      padding: 48px 24px 32px;
+    }
+    .footer-inner { max-width: 900px; margin: 0 auto; }
+    .footer-top {
+      display: flex; flex-direction: column; gap: 24px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 600; color: #fff;
+      letter-spacing: .04em;
+    }
+    .footer-logo span { color: var(--aqua-lt); }
+    .footer-tagline { font-size: .85rem; color: rgba(255,255,255,.45); margin-top: 6px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 16px 24px; }
+    .footer-links a {
+      font-size: .82rem; letter-spacing: .06em; text-transform: uppercase;
+      color: rgba(255,255,255,.5); text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--aqua-lt); }
+    .footer-bottom {
+      padding-top: 24px; font-size: .78rem; text-align: center;
+      color: rgba(255,255,255,.3);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (min-width: 640px) {
+      .services-grid { grid-template-columns: repeat(3, 1fr); }
+      .about-inner { grid-template-columns: 1fr 1fr; align-items: center; }
+      .contact-inner { grid-template-columns: 1fr 1fr; }
+      .nav-toggle { display: none; }
+      .nav-links { display: flex; }
+    }
+    @media (max-width: 639px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      section { padding: 64px 20px; }
+    }
+    @media (min-width: 900px) {
+      nav { padding: 20px 48px; }
+      section { padding: 100px 48px; }
+      .hero-content { padding: 0 48px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Veld<span>ora</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#portfolio" onclick="closeMobile()">Portfolio</a>
+  <a href="#instagram" onclick="closeMobile()">Gallery</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-label">✦ Pond Design Studio</span>
+    <h1>Beautiful Pond Designs<br>for <em>Your Space</em></h1>
+    <p class="hero-desc">
+      Custom pond decoration &amp; water landscaping — crafted to bring calm, beauty, and nature into your home or garden.
+    </p>
+    <div class="hero-btns">
+      <a href="#portfolio" class="btn-primary">View Portfolio</a>
+      <a href="https://instagram.com/Veldoraaa___" target="_blank" class="btn-outline">Contact on Instagram</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-img-wrap reveal-left">
+      <img src="P2.jpg" alt="Veldora pond design" loading="lazy" />
+    </div>
+    <div class="about-text reveal-fade">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Patio Pond Setup – <em>Bring Nature to Your Home</em></h2>
+      <p class="section-body" style="margin-bottom:12px;">
+        We specialize in designing and building beautiful patio ponds that transform your outdoor space into a peaceful natural retreat. Our service includes complete pond setup, water features, aquatic plants, decorative stones, and optional fish like koi or goldfish.
+      </p>
+      <p class="section-body" style="margin-bottom:12px;">
+        Whether you want a small relaxing water corner or a stylish pond for your garden or patio, we create customized designs that match your space and budget. Our ponds are easy to maintain, durable, and designed to enhance the beauty and value of your home.
+      </p>
+      <p class="section-body">
+        Let us help you create a calm, refreshing water feature right in your own patio.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div style="max-width:900px;margin:0 auto;">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-title">Our <em>Services</em></h2>
+    <div class="services-grid" style="margin-top:36px;">
+      <div class="service-card">
+        <div class="service-icon">🪨</div>
+        <h3>Pond Decoration</h3>
+        <p>Rocks, aquatic plants, lighting, and ornaments — we style your pond with natural elegance and artistic detail.</p>
+        <span class="service-tag">Decoration →</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌊</div>
+        <h3>Complete Pond Setup</h3>
+        <p>Full design and installation — from excavation and lining to filtration, pumps, and finishing touches.</p>
+        <span class="service-tag">Full Setup →</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌿</div>
+        <h3>Water Landscape Design</h3>
+        <p>Transform your garden or space with flowing streams, waterfalls, and integrated water landscaping.</p>
+        <span class="service-tag">Landscaping →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-header" style="max-width:900px;margin:0 auto 32px;">
+    <p class="section-label">Our Work</p>
+    <h2 class="section-title">Portfolio <em>Gallery</em></h2>
+  </div>
+  <div class="portfolio-grid">
+    <div class="p-card" onclick="openLightbox(0)">
+      <img src="P1.jpg" alt="Pond project 1" loading="lazy" />
+      <div class="p-overlay"><span class="p-overlay-text">Natural Koi Pond</span></div>
+      <div class="p-expand-btn">⛶</div>
+    </div>
+    <div class="p-card" onclick="openLightbox(1)">
+      <img src="P2.jpg" alt="Pond project 2" loading="lazy" />
+      <div class="p-overlay"><span class="p-overlay-text">Rock Garden Pond</span></div>
+      <div class="p-expand-btn">⛶</div>
+    </div>
+    <div class="p-card" onclick="openLightbox(2)">
+      <img src="P3.jpg" alt="Pond project 3" loading="lazy" />
+      <div class="p-overlay"><span class="p-overlay-text">Water Feature</span></div>
+      <div class="p-expand-btn">⛶</div>
+    </div>
+    <div class="p-card" onclick="openLightbox(3)">
+      <img src="P4.jpg" alt="Pond project 4" loading="lazy" />
+      <div class="p-overlay"><span class="p-overlay-text">Garden Waterfall</span></div>
+      <div class="p-expand-btn">⛶</div>
+    </div>
+    <div class="p-card" onclick="openLightbox(4)">
+      <img src="P5.jpg" alt="Pond project 5" loading="lazy" />
+      <div class="p-overlay"><span class="p-overlay-text">✦ Featured — Full Landscape Design</span></div>
+      <div class="p-expand-btn">⛶</div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>
+  <div class="lb-img-wrap">
+    <img id="lb-img" src="" alt="Gallery image" />
+  </div>
+  <button class="lb-nav lb-next" onclick="lbNav(1)">›</button>
+  <div class="lb-dots" id="lbDots"></div>
+</div>
+
+<!-- PROCESS -->
+<section id="process">
+  <div style="max-width:900px;margin:0 auto;">
+    <p class="section-label">How We Work</p>
+    <h2 class="section-title">Our <em>Process</em></h2>
+    <div class="process-list">
+      <div class="process-line"></div>
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Consultation</h4>
+          <p>We start with a friendly conversation about your space, vision, and budget. Every great pond starts with listening.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Design Planning</h4>
+          <p>Our team creates a tailored design plan — selecting materials, plants, and layouts that match your unique environment.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Installation</h4>
+          <p>We bring your vision to life with care and precision, handling every detail of the build from start to finish.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Final Touch</h4>
+          <p>Styling, planting, lighting — we add the finishing details that turn a pond into a breathtaking living feature.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section id="instagram">
+  <div class="ig-header">
+    <p class="section-label">Follow Along</p>
+    <h2 class="section-title">We're on <em>Instagram</em></h2>
+    <p class="section-body" style="margin:12px auto 0;text-align:center;">
+      Follow our journey and see our latest pond projects, behind-the-scenes, and water design inspiration.
+    </p>
+  </div>
+  <div class="ig-grid">
+    <div class="ig-thumb"><img src="P1.jpg" alt="" loading="lazy" /></div>
+    <div class="ig-thumb"><img src="P2.jpg" alt="" loading="lazy" /></div>
+    <div class="ig-thumb"><img src="P3.jpg" alt="" loading="lazy" /></div>
+    <div class="ig-thumb"><img src="P4.jpg" alt="" loading="lazy" /></div>
+    <div class="ig-thumb"><img src="P5.jpg" alt="" loading="lazy" /></div>
+    <div class="ig-thumb" style="background:var(--aqua-pale);display:flex;align-items:center;justify-content:center;border-radius:12px;">
+      <span style="font-size:1.6rem;">+</span>
+    </div>
+  </div>
+  <p class="ig-handle">@<span>Veldoraaa___</span></p>
+  <a href="https://instagram.com/Veldoraaa___" target="_blank" class="btn-primary" style="display:inline-block;">
+    Visit Our Instagram
+  </a>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div style="max-width:900px;margin:0 auto 40px;">
+    <p class="section-label">Get in Touch</p>
+    <h2 class="section-title">Let's Create <em>Something Beautiful</em></h2>
+  </div>
+  <div class="contact-inner">
+    <div class="contact-info">
+      <h3>Reach Us Directly</h3>
+      <div class="contact-options">
+        <a href="https://instagram.com/Veldoraaa___" target="_blank" class="contact-option">
+          <div class="contact-option-icon ico-ig">📸</div>
+          <div>
+            <div>Instagram (Main)</div>
+            <div style="font-size:.78rem;color:var(--ink-soft);font-weight:400;">@Veldoraaa___</div>
+          </div>
+        </a>
+        <a href="https://instagram.com/Mainakk__" target="_blank" class="contact-option">
+          <div class="contact-option-icon ico-ig">📸</div>
+          <div>
+            <div>Instagram (Owner)</div>
+            <div style="font-size:.78rem;color:var(--ink-soft);font-weight:400;">@Mainakk__</div>
+          </div>
+        </a>
+        <a href="https://wa.me/919474597599" target="_blank" class="contact-option">
+          <div class="contact-option-icon ico-wa">💬</div>
+          <div>
+            <div>WhatsApp</div>
+            <div style="font-size:.78rem;color:var(--ink-soft);font-weight:400;">+91 94745 97599</div>
+          </div>
+        </a>
+        <a href="mailto:veldora832@gmail.com" class="contact-option">
+          <div class="contact-option-icon ico-gmail">✉️</div>
+          <div>
+            <div>Email Us</div>
+            <div style="font-size:.78rem;color:var(--ink-soft);font-weight:400;">veldora832@gmail.com</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <h3>Send an Inquiry</h3>
+      <p style="font-size:.88rem;color:var(--ink-soft);line-height:1.65;margin-bottom:20px;">
+        Fill in your details and tap <strong>Send on WhatsApp</strong> — your message will open directly in WhatsApp so we can reply fast! 💬
+      </p>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" id="inqName" placeholder="e.g. Rahul Sharma" />
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="inqPhone" placeholder="+91 ..." />
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="inqMsg" placeholder="Tell us about your project idea..."></textarea>
+      </div>
+      <button class="form-submit" onclick="sendWhatsApp()">Send on WhatsApp ✦</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">Veld<span>ora</span></div>
+        <div class="footer-tagline">Custom Pond Design & Water Landscaping</div>
+      </div>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#process">Process</a>
+        <a href="#instagram">Instagram</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 Veldora. Crafted with care for nature &amp; beauty.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── NAV SCROLL ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  // ── MOBILE MENU ──
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileClose = document.getElementById('mobileClose');
+  navToggle.addEventListener('click', () => mobileMenu.classList.add('open'));
+  mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  function closeMobile() { mobileMenu.classList.remove('open'); }
+
+  // ── SCROLL REVEAL ──
+  const revealEls = document.querySelectorAll(
+    '.reveal-left, .reveal-fade, .service-card, .p-card, .process-step, .ig-thumb'
+  );
+  // Map class to initial state
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => {
+    // about image
+    if (el.classList.contains('reveal-left')) el.classList.add('about-img-wrap');
+    if (el.classList.contains('reveal-fade')) el.classList.add('about-text');
+    io.observe(el);
+  });
+
+  // ── LIGHTBOX ──
+  const images = ['P1.jpg','P2.jpg','P3.jpg','P4.jpg','P5.jpg'];
+  const captions = ['Natural Koi Pond','Rock Garden Pond','Water Feature','Garden Waterfall','Featured Landscape'];
+  let currentIdx = 0;
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbDots = document.getElementById('lbDots');
+
+  // Build dots
+  images.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'lb-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Image ' + (i+1));
+    d.onclick = () => setLbImage(i);
+    lbDots.appendChild(d);
+  });
+
+  function setLbImage(idx) {
+    currentIdx = (idx + images.length) % images.length;
+    lbImg.src = images[currentIdx];
+    lbImg.alt = captions[currentIdx];
+    document.querySelectorAll('.lb-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === currentIdx)
+    );
+  }
+  function openLightbox(idx) {
+    setLbImage(idx);
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function lbNav(dir) { setLbImage(currentIdx + dir); }
+
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'ArrowRight') lbNav(1);
+    if (e.key === 'ArrowLeft') lbNav(-1);
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Touch swipe
+  let tsX = 0;
+  lightbox.addEventListener('touchstart', e => tsX = e.touches[0].clientX, {passive:true});
+  lightbox.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tsX;
+    if (Math.abs(dx) > 40) lbNav(dx < 0 ? 1 : -1);
+  });
+  lightbox.addEventListener('click', e => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // ── WHATSAPP FORM ──
+  function sendWhatsApp() {
+    const name = document.getElementById('inqName').value.trim();
+    const phone = document.getElementById('inqPhone').value.trim();
+    const msg  = document.getElementById('inqMsg').value.trim();
+    if (!name && !msg) {
+      alert('Please fill in at least your name and message.');
+      return;
+    }
+    const text = `Hello Veldora! 🌿\n\nName: ${name || '—'}\nPhone: ${phone || '—'}\nMessage: ${msg || '—'}`;
+    const url = `https://wa.me/919474597599?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  }
+</script>
+</body>
+</html>
